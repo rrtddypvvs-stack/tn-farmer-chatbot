@@ -7,18 +7,8 @@ load_dotenv()
 
 chain = get_chain()
 
-print("Knowledge Base Loaded Successfully!")
 
-chat_history = []
-
-while True:
-
-    question = input("\nAsk a question (type 'exit' to quit): ")
-
-    if question.lower() == "exit":
-        break
-
-    results = get_documents_with_scores(question)
+def display_similarity_scores(results):
 
     print("\nSimilarity Scores")
     print("=" * 80)
@@ -28,6 +18,22 @@ while True:
         print(f"\nResult {i}")
         print(f"Score : {score:.4f}")
         print(f"Scheme: {doc.metadata.get('scheme_name', 'N/A')}")
+
+
+print("Knowledge Base Loaded Successfully!")
+
+chat_history = []
+
+while True:
+
+    question = input("\nAsk a question (type 'exit' to quit): ").strip()
+
+    if question.lower() == "exit":
+        break
+
+    results = get_documents_with_scores(question)
+
+    display_similarity_scores(results)
 
     history = "\n".join(
         f"User: {q}\nAssistant: {a}"
@@ -56,4 +62,4 @@ Current Question:
 
         print("\nError")
         print("=" * 60)
-        print(e)
+        print(f"Unable to generate an answer: {e}")
